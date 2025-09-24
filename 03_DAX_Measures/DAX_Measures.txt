@@ -1,0 +1,51 @@
+DAX Measures in Mitron bank credit card Analysis
+
+To find Total no of Customers---- Customers = DISTINCTCOUNT(dim_customers[customer_id])
+
+To find total no of male customers out of total customers----
+Male = 
+CALCULATE(
+    COUNTROWS(dim_customers),
+    dim_customers[gender] = "Male"
+)
+
+To find total no of Female customers out of total customers----
+Female = 
+CALCULATE(
+    COUNTROWS(dim_customers),
+    dim_customers[gender] = "Female"
+)
+
+Since the spend table has only 6 months of record I had created a measure to count the number of months for further calculation.
+Month_Count = 
+CALCULATE (
+    DISTINCTCOUNT ( fact_spends[month] ),
+    ALLEXCEPT ( fact_spends, fact_spends[customer_id] )
+)
+
+To find the Total income 
+Total Income = 
+SUMX(
+    dim_customers,
+    dim_customers[avg_income] * 6
+)
+
+To find total spend
+Total Spent = 
+SUM ( fact_spends[spend] 
+)
+
+To find avg of avg income
+Average of Avg Income = 
+AVERAGE ( dim_customers[avg_income] 
+)
+
+To find avg income utilizaton
+Avg Income Utilisation % = 
+DIVIDE(
+    [Total Spent],
+    [Total Income],
+    0
+)
+
+
